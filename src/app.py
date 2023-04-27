@@ -1,11 +1,25 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 app = Flask(__name__)
 
+todos = [{ "label": "My first task", "done": False }]
 
-
-@app.route('/blabla', methods=['GET'])
+@app.route('/todos', methods=['GET'])
 def hello_world():
-    return 'Hello, World!'
+    return jsonify(todos)
+   
+@app.route('/todos', methods=['POST'])
+def add_new_todo():
+    request_body = request.json
+    todos.append(request_body)
+    return jsonify(todos)
+
+
+@app.route('/todos/<int:position>', methods=['DELETE'])
+def delete_todo(position):
+    print(position)
+    del_task = todos.pop(position)
+    return jsonify(del_task)
+
 
 
 
